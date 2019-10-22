@@ -70,8 +70,8 @@ class ReflexAgent(Agent):
 
         "*** YOUR CODE HERE ***"
         Food=newFood.asList()
-        gPos=successorGameState.getGhostPositions()                         ###We have the position of the food and the ghost positions
-        FoodDist=[]                                                         ###We have the distance between the pacman,the food and the ghost
+        gPos=successorGameState.getGhostPositions()                         ###Vị trí của thức ăn và vị trí ma
+        FoodDist=[]                                                         ###Khoảng cách giữa pacman, thức ăn và ma
         GhostDist=[]
 
         for food in Food:
@@ -82,12 +82,12 @@ class ReflexAgent(Agent):
         if currentGameState.getPacmanPosition()==newPos:
             return(-(float("inf")))
 
-        for dist in GhostDist:                                              ###If the ghost is too near(next to pacman) we return(-float("inf")) like we have lost
+        for dist in GhostDist:                                              ###Nếu con ma quá gần (bên cạnh pacman), return(-float("inf")) ta đã thua
             if dist<2:
-                return (-(float("inf")))                                    ###When there is no food left we return float("inf") like we have won
-        if len(FoodDist)==0:                                                ##Finally we return 1000/sum(FoodDist) + 10000/len(FoodDist) as the evaluation of the state
-            return float("inf")                                             ###It is not necessary that we put 1000 or 10000 ,the only need is to be large enough contrary to sum(foodDist)
-                                                                            ###and len(foodDist) respectively
+                return (-(float("inf")))                                    ###Khi không còn thức ăn, return float("inf") ta đã thắng
+        if len(FoodDist)==0:                                                ##Cuối cùng return 1000/sum(FoodDist) + 10000/len(FoodDist) đánh giá của state
+            return float("inf")                                             ###Không nhất thiết là đặt 1000 hoặc 10000, nhu cầu duy nhất là đủ lớn trái với sum(foodDist)
+                                                                            ###và len(foodDist) tương ứng
         return 1000/sum(FoodDist) +10000/len(FoodDist)
 
 
@@ -139,14 +139,14 @@ class MinimaxAgent(MultiAgentSearchAgent):
         "*** YOUR CODE HERE ***"
         def max_value(gameState,depth):
             Actions=gameState.getLegalActions(0)
-            if len(Actions)==0 or gameState.isWin() or gameState.isLose() or depth==self.depth:             ###The trvial situations(state)
+            if len(Actions)==0 or gameState.isWin() or gameState.isLose() or depth==self.depth:             
                 return(self.evaluationFunction(gameState),None)
-            w=-(float("inf"))                                                                               ###We are trying to implement the 2 sides of the minimax algorithm the max and the min
+            w=-(float("inf"))                                                                               
             Act=None
-            for action in Actions:                                                                          ###In that way that the 2 functions are calling each other is like building the tree(diagrams from tha class)
-                sucsValue=min_value(gameState.generateSuccessor(0,action),1,depth)                          #We have the available moves and we are seeking for the "best" one
-                sucsValue=sucsValue[0]                                                                      #It is working exactly as the theory of minimax algorithm commands
-                if(sucsValue>w):                                                                            #Here we have as start -infinite
+            for action in Actions:                                                                          ###Theo cách đó, hai hàm gọi nhau giống như xây dựng cây (sơ đồ từ lớp tha)
+                sucsValue=min_value(gameState.generateSuccessor(0,action),1,depth)                          
+                sucsValue=sucsValue[0]                                                                     
+                if(sucsValue>w):                                                                            
                     w,Act=sucsValue,action
             return(w,Act)
 
@@ -154,19 +154,19 @@ class MinimaxAgent(MultiAgentSearchAgent):
             Actions=gameState.getLegalActions(agentID)
             if len(Actions) == 0:
                 return(self.evaluationFunction(gameState),None)
-            l=float("inf")                                                                                  ###As we see in contrast with max we begin from +infinte
+            l=float("inf")                                                                                  ###Trái ngược với max, bắt đầu từ +infinite
             Act=None
             for action in Actions:
                 if(agentID==gameState.getNumAgents() -1):
                     sucsValue=max_value(gameState.generateSuccessor(agentID,action),depth + 1)
                 else:
-                    sucsValue=min_value(gameState.generateSuccessor(agentID,action),agentID+1,depth)        ###We are doing exactly the opposite from the max "function"
+                    sucsValue=min_value(gameState.generateSuccessor(agentID,action),agentID+1,depth)        
                 sucsValue=sucsValue[0]
                 if(sucsValue<l):
                     l,Act=sucsValue,action
             return(l,Act)
         max_value=max_value(gameState,0)[1]
-        return max_value                                                                                    ###We are starting from the max and it goes as a tree max min max min
+        return max_value                                                                                    ###Bắt đầu từ max và nó đi như một cây max min max min
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
@@ -185,8 +185,8 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
 
             w=-(float("inf"))
             Act=None
-                                                                                                            ###We can see that the alpha beta agent is almost the same as the minimax with the difference
-                                                                                                            ###that now we have the pruning if w>a or w<b in the 2 "edges"
+                                                                                                            ###Tác nhân alpha beta gần giống như minimax với sự khác biệt
+                                                                                                            ###Cắt tỉa nếu w> a hoặc w <b trong 2 "edges"
             for action in Actions:
                 sucsValue=min_value(gameState.generateSuccessor(0,action),1,depth,a,b)
                 sucsValue=sucsValue[0]
@@ -202,9 +202,9 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
             Actions=gameState.getLegalActions(agentID) # Get the actions of the ghost
             if len(Actions) == 0:
                 return (self.evaluationFunction(gameState),None)
-                                                                                                            ###As we know from theory the alpha beta algorithms is an improved version
-                                                                                                            ###of the minimax in order to "pull through" some time,to have a better time
-                                                                                                            ###complexity
+                                                                                                            
+                                                                                                            
+                                                                                                            
             l = float("inf")
             Act = None
             for action in Actions:
@@ -221,7 +221,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
 
                 b=min(b,l)
 
-            return(l,Act)                                                                                      ###I think there is nothing else to be said about this agent
+            return(l,Act)                                                                                      
 
         a=-(float("inf"))
         b=float("inf")
@@ -243,8 +243,8 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         "*** YOUR CODE HERE ***"
         def max_value(gameState,depth):
             Actions=gameState.getLegalActions(0)
-            if len(Actions)==0 or gameState.isWin() or gameState.isLose() or depth==self.depth:   ###The max "function" is exactly the same with the minimax and the difference is at
-                return (self.evaluationFunction(gameState),None)                                  ##exp,min "function" that now we have the probability
+            if len(Actions)==0 or gameState.isWin() or gameState.isLose() or depth==self.depth:   ###"hàm" tối đa hoàn toàn giống với minimax và sự khác biệt là ở 
+                return (self.evaluationFunction(gameState),None)                                  ##exp, "hàm" tối thiểu mà bây giờ chúng ta có xác suất
 
             w=-(float("inf"))
             Act=None
@@ -253,9 +253,9 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
                 sucsValue=exp_value(gameState.generateSuccessor(0,action),1,depth)
                 sucsValue=sucsValue[0]
                 if(w<sucsValue):
-                    w,Act=sucsValue,action                                                          ###Now the expectimax algorithm is the same as the minimax but now we have
-                                                                                                    ###also the probability we insert about each move that we maybe do as we 've been taught
-                                                                                                    ###in theory,similar things we have in chess and all the other games
+                    w,Act=sucsValue,action                                                          
+                                                                                                    
+                                                                                                    
             return(w,Act)
 
         def exp_value(gameState,agentID,depth):
@@ -285,8 +285,8 @@ def betterEvaluationFunction(currentGameState):
       DESCRIPTION: <write something here so we know what you did>
     """
     "*** YOUR CODE HERE ***"
-    pacPosition=currentGameState.getPacmanPosition()                                                     ###Now we do not want only the pacman,the food and the ghost positions
-    gList=currentGameState.getGhostStates()                                                              ###but also the capsules
+    pacPosition=currentGameState.getPacmanPosition()                                                     ###Bây giờ chúng tôi không muốn chỉ có pacman, thức ăn và vị trí ma
+    gList=currentGameState.getGhostStates()                                                              ###mà còn là viên nang
     Food=currentGameState.getFood()
     Capsules=currentGameState.getCapsules()
 
@@ -298,19 +298,18 @@ def betterEvaluationFunction(currentGameState):
     foodDistList=[]
     for food in Food.asList():
         foodDistList+=[util.manhattanDistance(food,pacPosition)]
-    minFDist=min(foodDistList)                                                                              ###We have a better evaluation function,what it means?
-    GhDistList=[]                                                                                           ###It means that we have take into account more parameters in order to have a better evalution function
-    ScGhDistList=[]                                                                                         ###Of course every parameter has its own "gravity,importance" like chess the strategical advantages
-    for ghost in gList:                                                                                     ###are less important than the tactical,material ones
+    minFDist=min(foodDistList)                                                                              ###Một chức năng đánh giá tốt hơn, nó có nghĩa là gì?
+    GhDistList=[]                                                                                           ###Điều đó có nghĩa là tính đến nhiều tham số hơn để có chức năng đánh giá tốt hơn
+    ScGhDistList=[]                                                                                         ###Tất nhiên mỗi tham số đều có "lực hấp dẫn, tầm quan trọng" riêng như những lợi thế chiến lược
+    for ghost in gList:                                                                                     ###ít quan trọng hơn chiến thuật, vật chất
         if ghost.scaredTimer==0:
             GhDistList+=[util.manhattanDistance(pacPosition,ghost.getPosition())]
         elif ghost.scaredTimer>0:
             ScGhDistList+=[util.manhattanDistance(pacPosition,ghost.getPosition())]
     minGhDist=-1
     if len(GhDistList) > 0:
-        minGhDist=min(GhDistList)                                                                             #We have the min distance of a ghost,the min distance of a scaredGhost,the amount of the capsules,the food and the min distance of a food.
-    minScGhDist=-1                                                                                            #As we see they do not hve all the same role-importance in the estimation -evaluation of a state
-    if len(ScGhDistList)>0:
+        minGhDist=min(GhDistList)                                                                             #Khoảng cách tối thiểu của một con ma, khoảng cách tối thiểu của một ScaredGhost, số lượng viên nang, thức ăn và khoảng cách tối thiểu của một loại thực phẩm.
+    minScGhDist=-1                                                                                            #Không có tất cả vai trò quan trọng như nhau trong việc ước tính - đánh giá trạng thái nếu len(ScGhDistList)> 0:
         minScGhDist=min(ScGhDistList)
     score=scoreEvaluationFunction(currentGameState)
     score-= 1.5 * minFDist + 2 * (1.0/minGhDist) + 2 * minScGhDist + 20 * len(Capsules) + 4 * len(Food.asList())
